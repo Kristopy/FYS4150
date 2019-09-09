@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Project11.0.0
-DISTDIR = /Users/kristoffervarslott/Documents/C++/Computational\ Physics/build-Project1-Desktop_Qt_5_13_0_clang_64bit-Debug/.tmp/Project11.0.0
+DISTDIR = /Users/kristoffervarslott/Documents/C++/FYS4150/Output/.tmp/Project11.0.0
 LINK          = /Library/Developer/CommandLineTools/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -Wl,-syslibroot,/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk -mmacosx-version-min=10.12 -Wl,-rpath,@executable_path/../Frameworks
 LIBS          = $(SUBLIBS) -L/usr/local/lib -larmadillo -llapack -lblas   
@@ -200,7 +200,6 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf \
-		../Project1/.qmake.stash \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf \
@@ -235,7 +234,7 @@ EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
 EXPORT_VALID_ARCHS = x86_64
 EXPORT_ACTIVE_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(ARCHS))
 EXPORT_ARCH_ARGS = $(foreach arch, $(if $(EXPORT_ACTIVE_ARCHS), $(EXPORT_ACTIVE_ARCHS), $(EXPORT_VALID_ARCHS)), -arch $(arch))
-EXPORT__PRO_FILE_ = /Users/kristoffervarslott/Documents/C++/Computational Physics/Project1/Project1.pro
+EXPORT__PRO_FILE_ = /Users/kristoffervarslott/Documents/C++/FYS4150/Project1/Project1.pro
 
 
 include /Users/kristoffervarslott/Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.mk
@@ -389,7 +388,6 @@ Makefile: ../Project1/Project1.pro ../../../../Qt/5.13.0/clang_64/mkspecs/macx-c
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf \
-		.qmake.stash \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf \
@@ -557,7 +555,6 @@ Makefile: ../Project1/Project1.pro ../../../../Qt/5.13.0/clang_64/mkspecs/macx-c
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf:
-.qmake.stash:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf:
@@ -603,7 +600,6 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
-	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
