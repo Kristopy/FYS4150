@@ -4,15 +4,15 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        Function.cpp \
-        main.cpp
+    jacobi.cpp
 
 INCLUDEPATH += /usr/local/include
 
 LIBS += -L/usr/local/lib
 LIBS += -larmadillo -llapack -lblas
 
-DISTFILES +=
-
 HEADERS += \
-    Function.h
+    catch.hpp \
+    jacobi.h
+
+DISTFILES +=
