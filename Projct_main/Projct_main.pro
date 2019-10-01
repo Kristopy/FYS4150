@@ -4,18 +4,23 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        Function.cpp \
-        Test.cpp \
-        main.cpp
+        Jacobi.cpp \
+        functions.cpp \
+        initializematrix.cpp \
+        main.cpp \
+        test.cpp
 
 INCLUDEPATH += /usr/local/include
 
 LIBS += -L/usr/local/lib
 LIBS += -larmadillo -llapack -lblas
 
-DISTFILES +=
 
 HEADERS += \
-    Function.h \
+    Jacobi.h \
     catch.hpp \
-    catch.hpp
+    functions.h \
+    initializematrix.h
+
+DISTFILES +=
+QMAKE_CXXFLAGS += -O3

@@ -220,7 +220,8 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/lex.prf \
-		../Project2/Project2.pro jacobi.h ../Project2/jacobi.cpp
+		../Project2/Project2.pro catch.hpp \
+		jacobi.h ../Project2/jacobi.cpp
 QMAKE_TARGET  = Project2
 DESTDIR       = 
 TARGET        = Project2
