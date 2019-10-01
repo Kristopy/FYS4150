@@ -105,8 +105,7 @@ argument is the frequency wr" << endl;
     //string Add_String = to_string(n) + ".txt";
     fileout.append(Add_String);
 
-    //Testing Branching
-    //More testing
+    //ONe last test before CHHHHAAAAMPIUONSS
     ofile.open(fileout);
     ofile << setiosflags(ios::showpoint | ios::uppercase);
     ofile << "Method used: " << method << endl;
