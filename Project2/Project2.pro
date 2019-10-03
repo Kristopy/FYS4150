@@ -4,7 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    jacobi.cpp
+    Jacobi.cpp \
+    functions.cpp \
+    initializematrix.cpp \
+    jacobi.cpp \
+    main.cpp \
+    test.cpp
 
 INCLUDEPATH += /usr/local/include
 
@@ -12,7 +17,10 @@ LIBS += -L/usr/local/lib
 LIBS += -larmadillo -llapack -lblas
 
 HEADERS += \
+    Jacobi.h \
     catch.hpp \
+    functions.h \
+    initializematrix.h \
     jacobi.h
 
 DISTFILES +=
