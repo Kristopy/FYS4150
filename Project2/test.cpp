@@ -1,16 +1,13 @@
-/*
 #define CATCH_CONFIG_MAIN
 #include <iostream>
 #include <armadillo>
 #include <cmath>
 #include <string>
 #include <iomanip>
-
 #include "Jacobi.h"
 #include "initializematrix.h"
 #include "functions.h"
 #include "catch.hpp"
-
 using namespace std;
 using namespace arma;
 
@@ -69,4 +66,3 @@ TEST_CASE("Chekcing if Jacobi method gives right eigenvalues."){
     CHECK (JacobiEigenvalue[i] == Approx(Analytical_Eigenvalue[i]));
     }
 }
-*/
