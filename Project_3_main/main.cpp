@@ -16,16 +16,18 @@ ofstream ofile;
 
 int main(int argc, char* argv[])
 {
+    //Character filename, specified to first argument in command.
     char *outfilename;
     outfilename = argv[1];
 
+    // Assigning constant PI and calculating exact value of integral.
     const double PI = std::atan(1.0)*4;
     double Exact_value = (5*pow(PI,2))/(256);
 
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
     int c;
-    //Checking for valid integration limits [Lambda]
+    //Checking for valid integration limits [Lambda], is manipulated by adjusting ZERO.
     double int_limit = 0;
     for (int l = 1;  l < 100; l++){
         c = l;
@@ -33,10 +35,6 @@ int main(int argc, char* argv[])
             for (int j = 0; j < c; j++){
                 for (int k = 0; k < c; k++){
                     int_limit = integration_limit(i,j,k);
-                    //cout << "Det her er i: " << i << endl;
-                    //cout << "Det her er j: " << j << endl;
-                    //cout << "Det her er k: " << k << endl;
-                    //cout << "-----------------------" << endl;
                     }
                 }
             }
@@ -63,7 +61,7 @@ int main(int argc, char* argv[])
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    //Starting writing in the values we are interested in:
+    // Open file and write results to file:
     ofile.open(outfilename);
     ofile << setiosflags(ios::showpoint | ios::uppercase);
     ofile << "|   N:  |  Legendre:    |   Laguerre:  |  Excact result: |" << endl;
@@ -74,10 +72,15 @@ int main(int argc, char* argv[])
 
         //----------------------------------------------------------------------------------------------------------------------
         // Gaussian-Legendre quadrature
+
+        //Defining pointers: mesh-point and weights
         double *x = new double [N];
         double *w = new double [N];
 
+        //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
         gauleg(a, b, x, w, N);
+
+        //Summation over all six variables, where the sum is stores in int_gauss
         double int_gauss = 0.0;
         double iterations = 0.0;
         for ( int i = 0;  i < N; i++){
@@ -99,6 +102,7 @@ int main(int argc, char* argv[])
 
         // Gaussian-Laguerre quadrature
 
+        //Defining various pointers: mesh-points and weights for three variables.
         double *R_Gauss_Laguerre = new double [N+1];
         double *Weights_Gauss_Laguerre = new double [N+1];
 
@@ -110,10 +114,13 @@ int main(int argc, char* argv[])
 
         double alf = 0.0;
 
+        //Calling the function which calculates the mesh-points and weights in Gaussian-Laguerre
         gauss_laguerre(R_Gauss_Laguerre, Weights_Gauss_Laguerre, N, alf);
+        //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
         gauleg(0, PI, Theta, Weights_Theta, N);
         gauleg(0, 2*PI, Phi, Weights_Phi, N);
 
+        //Summation over all six variables, where the sum is stores in int_gausslag
         double int_gausslag = 0.;
         double iterations_Laguerre = 0.0;
         for ( int i = 1;  i <= N; i++){                      // r1
@@ -172,10 +179,11 @@ int main(int argc, char* argv[])
 
         //----------------------------------------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------------------------------------
-        // Open file and write results to file:
 
-        //For interpreting where in the loop we are in terminal
+
         cout << N << endl;
+
+        //Writing results in file.
         ofile << setw(5) << N;
         ofile << setw(18) << setprecision(8) << int_gauss;
         ofile << setw(15) << setprecision(8) << int_gausslag;
@@ -197,25 +205,3 @@ int main(int argc, char* argv[])
 
 
 }  // end of main program
-
-
-
-
-
-
-
-
-
-
-//   reserve space in memory for vectors containing the mesh points
-//   weights and function values for the use of the gauss-legendre
-//   method
-// Gauss-Laguerre is old-fashioned translation of F77 --> C++
-// arrays start at 1 and end at n
-//double *xgl = new double [n+1];
-//double *wgl = new double [n+1];
-// These arrays are used for improved Gauss-Legendre, mapping of
-// x \in [-1,1] to x \in [0, infinity)
-//double *r = new double [n];
-//double *s = new double [n];
-//   set up the mesh points and weights
