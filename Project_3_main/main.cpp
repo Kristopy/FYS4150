@@ -67,12 +67,12 @@ int main(int argc, char* argv[])
     ofile << "|   N:  |  Legendre:    |   Laguerre:  |  Excact result: |" << endl;
     ofile << "|       |               |              |                 |" << endl;
 
-    //Looping throug different iteration -values of N
+    //Looping through different iteration -values of N
     for(int N = 1; N <= n ; N++){
 
         //----------------------------------------------------------------------------------------------------------------------
         // Gaussian-Legendre quadrature
-
+        //----------------------------------------------------------------------------------------------------------------------
         //Defining pointers: mesh-point and weights
         double *x = new double [N];
         double *w = new double [N];
@@ -99,9 +99,8 @@ int main(int argc, char* argv[])
         }
 
         //----------------------------------------------------------------------------------------------------------------------
-
         // Gaussian-Laguerre quadrature
-
+        //----------------------------------------------------------------------------------------------------------------------
         //Defining various pointers: mesh-points and weights for three variables.
         double *R_Gauss_Laguerre = new double [N+1];
         double *Weights_Gauss_Laguerre = new double [N+1];
@@ -180,7 +179,6 @@ int main(int argc, char* argv[])
         //----------------------------------------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------------------------------------
 
-
         cout << N << endl;
 
         //Writing results in file.
@@ -199,9 +197,9 @@ int main(int argc, char* argv[])
         delete [] Phi;
         delete [] Weights_Phi;
     }
+    //Loop ended
     ofile.close();
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
-
 
 }  // end of main program
