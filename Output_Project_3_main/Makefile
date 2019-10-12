@@ -52,10 +52,12 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Project_3_main/legendre.cpp \
+SOURCES       = ../Project_3_main/Laguerre.cpp \
+		../Project_3_main/legendre.cpp \
 		../Project_3_main/main.cpp \
 		../Project_3_main/repulsion_function.cpp 
-OBJECTS       = legendre.o \
+OBJECTS       = Laguerre.o \
+		legendre.o \
 		main.o \
 		repulsion_function.o
 DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
@@ -202,6 +204,7 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf \
+		../Project_3_main/.qmake.stash \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf \
@@ -223,8 +226,10 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/lex.prf \
-		../Project_3_main/Project_3_main.pro legendre.h \
-		repulsion_function.h ../Project_3_main/legendre.cpp \
+		../Project_3_main/Project_3_main.pro Laguerre.h \
+		legendre.h \
+		repulsion_function.h ../Project_3_main/Laguerre.cpp \
+		../Project_3_main/legendre.cpp \
 		../Project_3_main/main.cpp \
 		../Project_3_main/repulsion_function.cpp
 QMAKE_TARGET  = Project_3_main
@@ -392,6 +397,7 @@ Makefile: ../Project_3_main/Project_3_main.pro ../../../../Qt/5.13.0/clang_64/mk
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf \
@@ -559,6 +565,7 @@ Makefile: ../Project_3_main/Project_3_main.pro ../../../../Qt/5.13.0/clang_64/mk
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/qt_config.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/macx-clang/qmake.conf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/mac/sdk.prf:
 ../../../../Qt/5.13.0/clang_64/mkspecs/features/toolchain.prf:
@@ -604,6 +611,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -628,10 +636,14 @@ compiler_clean:
 
 ####### Compile
 
+Laguerre.o: ../Project_3_main/Laguerre.cpp ../Project_3_main/Laguerre.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Laguerre.o ../Project_3_main/Laguerre.cpp
+
 legendre.o: ../Project_3_main/legendre.cpp ../Project_3_main/legendre.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o legendre.o ../Project_3_main/legendre.cpp
 
 main.o: ../Project_3_main/main.cpp ../Project_3_main/legendre.h \
+		../Project_3_main/Laguerre.h \
 		../Project_3_main/repulsion_function.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Project_3_main/main.cpp
 

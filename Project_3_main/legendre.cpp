@@ -45,7 +45,7 @@ void gauleg(double x1, double x2, double x[], double w[], int n)
 
        /*
        ** p1 is now the desired Legrendre polynomial. Next compute
-           ** ppp its derivative by standard relation involving also p2,
+           ** pp its derivative by standard relation involving also p2,
            ** polynomial of one lower order.
            */
 
