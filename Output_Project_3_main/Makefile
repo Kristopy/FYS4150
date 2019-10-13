@@ -52,11 +52,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Project_3_main/Laguerre.cpp \
+SOURCES       = ../Project_3_main/Integration_loops.cpp \
+		../Project_3_main/Laguerre.cpp \
 		../Project_3_main/legendre.cpp \
 		../Project_3_main/main.cpp \
 		../Project_3_main/repulsion_function.cpp 
-OBJECTS       = Laguerre.o \
+OBJECTS       = Integration_loops.o \
+		Laguerre.o \
 		legendre.o \
 		main.o \
 		repulsion_function.o
@@ -226,9 +228,11 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/lex.prf \
-		../Project_3_main/Project_3_main.pro Laguerre.h \
+		../Project_3_main/Project_3_main.pro Integration_loops.h \
+		Laguerre.h \
 		legendre.h \
-		repulsion_function.h ../Project_3_main/Laguerre.cpp \
+		repulsion_function.h ../Project_3_main/Integration_loops.cpp \
+		../Project_3_main/Laguerre.cpp \
 		../Project_3_main/legendre.cpp \
 		../Project_3_main/main.cpp \
 		../Project_3_main/repulsion_function.cpp
@@ -636,15 +640,18 @@ compiler_clean:
 
 ####### Compile
 
+Integration_loops.o: ../Project_3_main/Integration_loops.cpp ../Project_3_main/legendre.h \
+		../Project_3_main/Laguerre.h \
+		../Project_3_main/repulsion_function.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Integration_loops.o ../Project_3_main/Integration_loops.cpp
+
 Laguerre.o: ../Project_3_main/Laguerre.cpp ../Project_3_main/Laguerre.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Laguerre.o ../Project_3_main/Laguerre.cpp
 
 legendre.o: ../Project_3_main/legendre.cpp ../Project_3_main/legendre.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o legendre.o ../Project_3_main/legendre.cpp
 
-main.o: ../Project_3_main/main.cpp ../Project_3_main/legendre.h \
-		../Project_3_main/Laguerre.h \
-		../Project_3_main/repulsion_function.h
+main.o: ../Project_3_main/main.cpp ../Project_3_main/Integration_loops.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Project_3_main/main.cpp
 
 repulsion_function.o: ../Project_3_main/repulsion_function.cpp ../Project_3_main/repulsion_function.h

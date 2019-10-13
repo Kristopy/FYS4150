@@ -5,20 +5,29 @@
 #include <string>
 //#include <stdio.h>
 //#include <stdlib.h>
-#define ZERO 1.0E-5
-#include "legendre.h"
-#include "Laguerre.h"
 #include "repulsion_function.h"
-
+#include "integration_loops.h"
 
 using namespace std;
 ofstream ofile;
 
+
 int main(int argc, char* argv[])
 {
-    //Character filename, specified to first argument in command.
-    char *outfilename;
-    outfilename = argv[1];
+    string outfilename;
+    string method;
+    string both_algo;
+
+    // Declaration of command line arguments
+    if (argc <= 2){
+        cout << "Error occured: " << argv[0] <<endl;
+        cout <<  "Need do provide a commandline argument for which version to run, [Legendre, Laguerre, MonteCarlo], or make a file by passing inn [Project_3]" << endl;
+        exit(1);}
+    else{
+      outfilename = argv[1];            // First command line argument
+      method      = argv[2];            // Second command line argument
+      both_algo   = argv[3];            // Second command line argument
+    }
 
     // Assigning constant PI and calculating exact value of integral.
     const double PI = std::atan(1.0)*4;
@@ -26,27 +35,9 @@ int main(int argc, char* argv[])
 
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
-    int c;
-    //Checking for valid integration limits [Lambda], is manipulated by adjusting ZERO.
-    double int_limit = 0;
-    for (int l = 1;  l < 100; l++){
-        c = l;
-        for ( int i = 0;  i < c; i++){
-            for (int j = 0; j < c; j++){
-                for (int k = 0; k < c; k++){
-                    int_limit = integration_limit(i,j,k);
-                    }
-                }
-            }
-    //If the exponetial value is lower than the defined zero
-    //we set the integration limit, as well as breaking the loop
-    if (int_limit < ZERO){
-        double h = sqrt(c*c + c*c+ c*c);
-        cout <<  "Integration limits can be set to:" << "["<<-h<<","<< h<< "]" << endl;
-        break;}
-    }
-    cout << "Value of exponential = "<< setw(20) << setprecision(15)  << int_limit << endl;
-
+    cout << "-----------------------------------------------------------------------------"<<endl;
+    integration_limit();
+    cout << "-----------------------------------------------------------------------------"<<endl;
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -61,145 +52,80 @@ int main(int argc, char* argv[])
     //----------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    // Open file and write results to file:
-    ofile.open(outfilename);
-    ofile << setiosflags(ios::showpoint | ios::uppercase);
-    ofile << "|   N:  |  Legendre:    |   Laguerre:  |  Excact result: |" << endl;
-    ofile << "|       |               |              |                 |" << endl;
-
-    //Looping through different iteration -values of N
-    for(int N = 1; N <= n ; N++){
-
-        //----------------------------------------------------------------------------------------------------------------------
-        // Gaussian-Legendre quadrature
-        //----------------------------------------------------------------------------------------------------------------------
-        //Defining pointers: mesh-point and weights
-        double *x = new double [N];
-        double *w = new double [N];
-
-        //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
-        gauleg(a, b, x, w, N);
-
-        //Summation over all six variables, where the sum is stores in int_gauss
-        double int_gauss = 0.0;
-        double iterations = 0.0;
-        for ( int i = 0;  i < N; i++){
-            for (int j = 0; j < N; j++){
-                for (int k = 0; k < N; k++){
-                    for (int l = 0; l < N; l++){
-                        for (int p = 0; p < N; p++){
-                            for (int q = 0; q < N; q++){
-                                int_gauss+=w[i]*w[j]*w[k]*w[l]*w[p]*w[q]*Cartesian_Function(x[i],x[j],x[k],x[l],x[p],x[q]);
-                                iterations++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //----------------------------------------------------------------------------------------------------------------------
-        // Gaussian-Laguerre quadrature
-        //----------------------------------------------------------------------------------------------------------------------
-        //Defining various pointers: mesh-points and weights for three variables.
-        double *R_Gauss_Laguerre = new double [N+1];
-        double *Weights_Gauss_Laguerre = new double [N+1];
-
-        double *Theta = new double[N];
-        double *Weights_Theta = new double [N];
-
-        double *Phi = new double [N];
-        double *Weights_Phi = new double [N];
-
-        double alf = 0.0;
-
-        //Calling the function which calculates the mesh-points and weights in Gaussian-Laguerre
-        gauss_laguerre(R_Gauss_Laguerre, Weights_Gauss_Laguerre, N, alf);
-        //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
-        gauleg(0, PI, Theta, Weights_Theta, N);
-        gauleg(0, 2*PI, Phi, Weights_Phi, N);
-
-        //Summation over all six variables, where the sum is stores in int_gausslag
-        double int_gausslag = 0.;
-        double iterations_Laguerre = 0.0;
-        for ( int i = 1;  i <= N; i++){                      // r1
-            for (int j = 1; j <= N; j++){                    // r2
-                for (int k = 0; k < N; k++){                 // Kun de to første som skal gå fra 1 til n?
-                    for (int l = 0; l < N; l++){
-                        for (int p = 0; p < N; p++){
-                            for (int q = 0; q < N; q++){
-                                int_gausslag += Weights_Gauss_Laguerre[i]*Weights_Gauss_Laguerre[j]*Weights_Theta[k]*Weights_Theta[l]*Weights_Phi[p]*Weights_Phi[q]*Spherical_Function(R_Gauss_Laguerre[i],R_Gauss_Laguerre[j],Theta[k], Theta[l], Phi[p], Phi[q]); //Spherical_Coordinates()*Weights for de forskjellige koordinatene//*sin(xgl[i]);
-                                iterations_Laguerre++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //----------------------------------------------------------------------------------------------------------------------
-        /*
-         cout << "------------------------------------------------------------------------------ " << endl;
-         cout << "Weigths Laguerre" << endl;
-         for (int i = 1; i<N-1; i++ ){
-            cout << Weights_Gauss_Laguerre[i] << endl;
-        }
-         cout << "------------------------------------------------------------------------------ " << endl;
-         cout << "Weigths Theta" << endl;
-        for (int i = 1; i<N-1; i++ ){
-            cout << Weights_Theta[i] << endl;
-        }
-         cout << "------------------------------------------------------------------------------ " << endl;
-         cout << "Weigths Phi" << endl;
-        for (int i = 1; i<N-1; i++ ){
-            cout << Weights_Phi[i] << endl;
-        }
-         cout << "------------------------------------------------------------------------------ " << endl;
-         cout << "Weights Legendre" << endl;
-         for (int i = 1; i<N-1; i++ ){
-            cout << w[i] << endl;
-        }
-         cout << "------------------------------------------------------------------------------ " << endl;
-
-
-        //Limits of [-3, 3] yields 9.59929050878060E-07
-        //Limits of [-4, 4] yields 9.40499789667483E-10
-        //Limits of [-5, 5] yields 9.21463782719653E-13
-        //Limits of [-6, 6] yields 9.02813070446519E-16
-
-        cout << "Iterations: " << iterations << endl;
+    if (argv[3]){
+        cout << "------------------------------------------------------------------------------ " << endl;
+        cout << "Running Legedendre and Laguerre"<< endl;
         cout  << setiosflags(ios::showpoint | ios::uppercase);
         cout << "------------------------------------------------------------------------------ " << endl;
-        cout << "Gaussian-Legendre quadrature = "<< setw(20) << setprecision(15)  << int_gauss << endl;
-        cout << "Gaussian-Laguerre quadrature = "<< setw(20) << setprecision(15)  << int_gausslag << endl;
+        // Open file and write results to file:
+        ofile.open(outfilename);
+        ofile << setiosflags(ios::showpoint | ios::uppercase);
+        ofile << "|   N:  |  Legendre:    | Relative error Legendre: |   Laguerre:  |  Relative error Laguerre: |  Excact result: |" << endl;
+        ofile << "|       |               |                          |              |                           |                 |" << endl;
+
+        //Looping through different iteration -values of N
+        for(int N = 1; N <= n ; N++){
+
+            double int_legendre, Legendre_time;
+            Gauss_legendre(a, b, N, int_legendre, Legendre_time);
+
+            double int_laguerre,Laguerre_time;
+            Gauss_laguerre(N,PI, int_laguerre, Laguerre_time);
+
+            //----------------------------------------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------------------------------------
+            //Calculating the relative error
+            double relative_error_leg = (Exact_value - int_legendre)/Exact_value;
+            double relative_error_lag = (Exact_value - int_laguerre)/Exact_value;
+            //----------------------------------------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------------------------------------
+            cout << N << endl;
+            //Writing results in file.
+            ofile << setw(5) << N;
+            ofile << setw(18) << setprecision(8) << int_legendre;
+            ofile << setw(20) << setprecision(8) << relative_error_leg;
+            ofile << setw(22) << setprecision(8) << int_laguerre;
+            ofile << setw(22) << setprecision(8) << relative_error_lag;
+            ofile << setw(22) << setprecision(8) << Exact_value << endl;
+
+        }
+        //Loop ended
+        ofile.close();
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+    if (argc < 2){
+
+        if (argc < 2 || method == "Legendre"){
+        double int_legendre, Legendre_time;
+        Gauss_legendre(a, b, n,int_legendre, Legendre_time);
+
+        cout << "------------------------------------------------------------------------------ " << endl;
+        cout << "Running Gaussian-Legendre quadrature"<< endl;
+        cout  << setiosflags(ios::showpoint | ios::uppercase);
+        cout << "------------------------------------------------------------------------------ " << endl;
+        cout << "Gaussian-Legendre quadrature = "<< setw(20) << setprecision(15)  << int_legendre << endl;
         cout << "------------------------------------------------------------------------------ " << endl;
         cout << "Excact result = "<< Exact_value << endl;
         cout << "------------------------------------------------------------------------------ " << endl;
-        */
 
-        //----------------------------------------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------------------------------------
+        }
+        else if(argc < 2 || method == "Laguerre"){
+            double int_laguerre,Laguerre_time;
+            Gauss_laguerre(n,PI, int_laguerre, Laguerre_time);
 
-        cout << N << endl;
-
-        //Writing results in file.
-        ofile << setw(5) << N;
-        ofile << setw(18) << setprecision(8) << int_gauss;
-        ofile << setw(15) << setprecision(8) << int_gausslag;
-        ofile << setw(15) << setprecision(8) << Exact_value << endl;
-
-
-        delete [] x;
-        delete [] w;
-        delete [] R_Gauss_Laguerre;
-        delete [] Weights_Gauss_Laguerre;
-        delete [] Theta;
-        delete [] Weights_Theta;
-        delete [] Phi;
-        delete [] Weights_Phi;
+            cout << "------------------------------------------------------------------------------ " << endl;
+            cout << "Running Gauss-Laguerre Quadrature" << endl;
+            cout << setiosflags(ios::showpoint | ios::uppercase);
+            cout << "------------------------------------------------------------------------------ " << endl;
+            cout << "Gaussian-Laguerre quadrature = "<< setw(20) << setprecision(15)  << int_laguerre << endl;
+            cout << "------------------------------------------------------------------------------ " << endl;
+            cout << "Excact result = "<< Exact_value << endl;
+            cout << "------------------------------------------------------------------------------ " << endl;
+        }
     }
-    //Loop ended
-    ofile.close();
-    //----------------------------------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
 
 }  // end of main program
+

@@ -1,14 +1,12 @@
 #include "legendre.h"
 #include <cmath>
-
-
 #define   ZERO       1.0E-10
 
 void gauleg(double x1, double x2, double x[], double w[], int n)
 {
    int         m,j,i;
    double      z1,z,xm,xl,pp,p3,p2,p1;
-   double      const  pi = 3.14159265359;
+   double const pi = 4*atan(1);
    double      *x_low, *x_high, *w_low, *w_high;
 
    m  = (n + 1)/2;                             // roots are symmetric in the interval
@@ -65,4 +63,4 @@ void gauleg(double x1, double x2, double x[], double w[], int n)
       *(w_high--) = *(w_low++);
    }
 } // End_ function gauleg()
-
+#undef ZERO

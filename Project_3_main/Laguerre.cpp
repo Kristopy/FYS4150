@@ -3,10 +3,9 @@
 #include <cmath>
 #define EPS 3.0e-14
 #define MAXIT 10
-#define ZERO 1.0E-10
+
 
 using namespace std;
-
 
 void gauss_laguerre(double *x, double *w, int n, double alf){
     int i,its,j;
@@ -29,7 +28,7 @@ void gauss_laguerre(double *x, double *w, int n, double alf){
             for (j=1;j<=n;j++) {
                 p3=p2;
                 p2=p1;
-                p1=((2*j-1-z)*p2-(j-1)*p3)/j;
+                p1=((2*j-1+alf-z)*p2-(j-1+alf)*p3)/j;
             }
             pp=(n*p1-(n+alf)*p2)/z;
             z1=z;
@@ -57,4 +56,5 @@ double gammln( double xx){
     for (j=0;j<=5;j++) ser += cof[j]/++y;
     return -tmp+log(2.5066282746310005*ser/x);
 }
-
+#undef EPS
+#undef MAXIT
