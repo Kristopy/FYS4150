@@ -1,4 +1,4 @@
-#include "repulsion_function.h"
+#include "Repulsion_function.h"
 #include <cmath>
 #define ZERO 1.0E-6
 

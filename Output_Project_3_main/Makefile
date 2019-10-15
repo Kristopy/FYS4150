@@ -54,14 +54,14 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Project_3_main/Integration_loops.cpp \
 		../Project_3_main/Laguerre.cpp \
-		../Project_3_main/legendre.cpp \
-		../Project_3_main/main.cpp \
-		../Project_3_main/repulsion_function.cpp 
+		../Project_3_main/Legendre.cpp \
+		../Project_3_main/Repulsion_function.cpp \
+		../Project_3_main/main.cpp 
 OBJECTS       = Integration_loops.o \
 		Laguerre.o \
-		legendre.o \
-		main.o \
-		repulsion_function.o
+		Legendre.o \
+		Repulsion_function.o \
+		main.o
 DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/qdevice.pri \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/device_config.prf \
@@ -230,12 +230,12 @@ DIST          = ../../../../Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.13.0/clang_64/mkspecs/features/lex.prf \
 		../Project_3_main/Project_3_main.pro Integration_loops.h \
 		Laguerre.h \
-		legendre.h \
-		repulsion_function.h ../Project_3_main/Integration_loops.cpp \
+		Legendre.h \
+		Repulsion_function.h ../Project_3_main/Integration_loops.cpp \
 		../Project_3_main/Laguerre.cpp \
-		../Project_3_main/legendre.cpp \
-		../Project_3_main/main.cpp \
-		../Project_3_main/repulsion_function.cpp
+		../Project_3_main/Legendre.cpp \
+		../Project_3_main/Repulsion_function.cpp \
+		../Project_3_main/main.cpp
 QMAKE_TARGET  = Project_3_main
 DESTDIR       = 
 TARGET        = Project_3_main
@@ -640,22 +640,23 @@ compiler_clean:
 
 ####### Compile
 
-Integration_loops.o: ../Project_3_main/Integration_loops.cpp ../Project_3_main/legendre.h \
+Integration_loops.o: ../Project_3_main/Integration_loops.cpp ../Project_3_main/Legendre.h \
 		../Project_3_main/Laguerre.h \
-		../Project_3_main/repulsion_function.h
+		../Project_3_main/Repulsion_function.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Integration_loops.o ../Project_3_main/Integration_loops.cpp
 
 Laguerre.o: ../Project_3_main/Laguerre.cpp ../Project_3_main/Laguerre.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Laguerre.o ../Project_3_main/Laguerre.cpp
 
-legendre.o: ../Project_3_main/legendre.cpp ../Project_3_main/legendre.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o legendre.o ../Project_3_main/legendre.cpp
+Legendre.o: ../Project_3_main/Legendre.cpp ../Project_3_main/Legendre.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Legendre.o ../Project_3_main/Legendre.cpp
 
-main.o: ../Project_3_main/main.cpp ../Project_3_main/Integration_loops.h
+Repulsion_function.o: ../Project_3_main/Repulsion_function.cpp ../Project_3_main/Repulsion_function.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Repulsion_function.o ../Project_3_main/Repulsion_function.cpp
+
+main.o: ../Project_3_main/main.cpp ../Project_3_main/Repulsion_function.h \
+		../Project_3_main/integration_loops.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Project_3_main/main.cpp
-
-repulsion_function.o: ../Project_3_main/repulsion_function.cpp ../Project_3_main/repulsion_function.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o repulsion_function.o ../Project_3_main/repulsion_function.cpp
 
 ####### Install
 

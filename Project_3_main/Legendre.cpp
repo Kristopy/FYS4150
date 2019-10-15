@@ -1,8 +1,8 @@
-#include "legendre.h"
+#include "Legendre.h"
 #include <cmath>
 #define   ZERO       1.0E-10
 
-void gauleg(double x1, double x2, double x[], double w[], int n)
+void gauss_legendre(double x1, double x2, double x[], double w[], int n)
 {
    int         m,j,i;
    double      z1,z,xm,xl,pp,p3,p2,p1;

@@ -6,9 +6,9 @@
 //#include <stdio.h>
 //#include <stdlib.h>
 
-#include "legendre.h"
+#include "Legendre.h"
 #include "Laguerre.h"
-#include "repulsion_function.h"
+#include "Repulsion_function.h"
 
 
 using namespace std;
@@ -16,19 +16,19 @@ using namespace std;
 //----------------------------------------------------------------------------------------------------------------------
 // Gaussian-Legendre quadrature
 //----------------------------------------------------------------------------------------------------------------------
-double Gauss_legendre(double a, double b, int N, double& int_legendre, double& Legendre_time){
-    clock_t start, finish;
+double GQ_legendre(double a, double b, int N, double& int_legendre, double& Legendre_time){
+    clock_t start_legendre, finish_legendre;
     //Defining pointers: mesh-point and weights
     double *x = new double [N];
     double *w = new double [N];
 
     //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
-    gauleg(a, b, x, w, N);
+    gauss_legendre(a, b, x, w, N);
 
     //Summation over all six variables, where the sum is stores in int_gauss
     double int_leg = 0.0;
     double iterations = 0.0;
-    start = clock();                    //Starts counting
+    start_legendre = clock();                    //Starts counting
     for ( int i = 0;  i < N; i++){
         for (int j = 0; j < N; j++){
             for (int k = 0; k < N; k++){
@@ -43,8 +43,9 @@ double Gauss_legendre(double a, double b, int N, double& int_legendre, double& L
             }
         }
     }
-    finish = clock();                   // Stops counting
-    Legendre_time = (double) (finish - start)/(CLOCKS_PER_SEC);// Stops counting
+    finish_legendre = clock();                   // Stops counting
+
+    Legendre_time = (double) (finish_legendre - start_legendre)/(CLOCKS_PER_SEC); // Stops counting
     int_legendre = int_leg;
 
     delete [] x;
@@ -56,7 +57,9 @@ double Gauss_legendre(double a, double b, int N, double& int_legendre, double& L
 //----------------------------------------------------------------------------------------------------------------------
 // Gaussian-Laguerre quadrature
 //----------------------------------------------------------------------------------------------------------------------
-double Gauss_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time){
+double GQ_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time){
+
+    clock_t start_laguerre, finish_laguerre;
     //Defining various pointers: mesh-points and weights for three variables.
     double *R_Gauss_Laguerre = new double [N+1];
     double *Weights_Gauss_Laguerre = new double [N+1];
@@ -74,12 +77,13 @@ double Gauss_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_t
     //Calling the function which calculates the mesh-points and weights in Gaussian-Laguerre
     gauss_laguerre(R_Gauss_Laguerre, Weights_Gauss_Laguerre, N, alf);
     //Calling the function which calculates the mesh-points and weights in Gaussian-Legendre
-    gauleg(0, PI, Theta, Weights_Theta, N);
-    gauleg(0, 2*PI, Phi, Weights_Phi, N);
+    gauss_legendre(0, PI, Theta, Weights_Theta, N);
+    gauss_legendre(0, 2*PI, Phi, Weights_Phi, N);
 
     //Summation over all six variables, where the sum is stores in int_gausslag
     double int_lag = 0.0;
     double iterations_Laguerre = 0.0;
+    start_laguerre = clock();
     for ( int i = 1;  i <= N; i++){                      // r1
         for (int j = 1; j <= N; j++){                    // r2
             for (int k = 0; k < N; k++){                 // Kun de to første som skal gå fra 1 til n?
@@ -95,6 +99,8 @@ double Gauss_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_t
             }
         }
     }
+    finish_laguerre = clock();
+    Laguerre_time = (double) (finish_laguerre - start_laguerre)/(CLOCKS_PER_SEC); // Stops counting
     int_lag *= norm;
     int_laguerre = int_lag;
 
@@ -130,7 +136,7 @@ double integration_limit(){
         cout <<  "Integration limits can be set to:" << "["<< setprecision(1)  << -h <<","<< setprecision(1)  << h << "]" << endl;
         break;}
     }
-    cout << "Value of exponential = "<< setw(20) << setprecision(15)  << int_limit << endl;
+    //cout << "Value of exponential = "<< setw(20) << setprecision(15)  << int_limit << endl;
     return int_limit;
 }
 // End integration loop for finding limit

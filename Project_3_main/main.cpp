@@ -4,8 +4,8 @@
 #include <iomanip>  //setiosflags, setw, setprecision
 #include <string>
 
-#include "repulsion_function.h"
-#include "integration_loops.h"
+#include "Repulsion_function.h"
+#include "Integration_loops.h"
 
 using namespace std;
 ofstream ofile;
@@ -49,23 +49,23 @@ int main(int argc, char* argv[])
         string outfilename;
         outfilename = argv[1];
         cout << "------------------------------------------------------------------------------ " << endl;
-        cout << "Running Legedendre and Laguerre"<< endl;
+        cout << "Running Legendre and Laguerre"<< endl;
         cout  << setiosflags(ios::showpoint | ios::uppercase);
         cout << "------------------------------------------------------------------------------ " << endl;
         // Open file and write results to file:
         ofile.open(outfilename);
         ofile << setiosflags(ios::showpoint | ios::uppercase);
-        ofile << "|   N:  |  Legendre:    | Relative error Legendre: |   Laguerre:  |  Relative error Laguerre: |  Excact result: |" << endl;
-        ofile << "|       |               |                          |              |                           |                 |" << endl;
+        ofile << "|   N:  |  Legendre:    |  CPU-time Legendre:    | Relative error Legendre: |   Laguerre:  | CPU-time Laguerre | Relative error Laguerre: |  Excact result: |" << endl;
+        ofile << "|       |               |                        |                          |              |                   |                          |                 |" << endl;
 
         //Looping through different iteration -values of N
         for(int N = 1; N <= n ; N++){
 
             double int_legendre, Legendre_time;
-            Gauss_legendre(a, b, N, int_legendre, Legendre_time);
+            GQ_legendre(a, b, N, int_legendre, Legendre_time);
 
             double int_laguerre,Laguerre_time;
-            Gauss_laguerre(N,PI, int_laguerre, Laguerre_time);
+            GQ_laguerre(N,PI, int_laguerre, Laguerre_time);
 
             //----------------------------------------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------------------------------------
@@ -78,9 +78,11 @@ int main(int argc, char* argv[])
             //Writing results in file.
             ofile << setw(5) << N;
             ofile << setw(18) << setprecision(8) << int_legendre;
-            ofile << setw(20) << setprecision(8) << relative_error_leg;
+            ofile << setw(20) << setprecision(8) << Legendre_time;
+            ofile << setw(23) << setprecision(8) << relative_error_leg;
             ofile << setw(22) << setprecision(8) << int_laguerre;
-            ofile << setw(22) << setprecision(8) << relative_error_lag;
+            ofile << setw(20) << setprecision(8) << Laguerre_time;
+            ofile << setw(23) << setprecision(8) << relative_error_lag;
             ofile << setw(22) << setprecision(8) << Exact_value << endl;
 
         }
@@ -96,30 +98,33 @@ int main(int argc, char* argv[])
         method = argv[2];
         if (method == "Legendre"){
             double int_legendre, Legendre_time;
-            Gauss_legendre(a, b, n,int_legendre, Legendre_time);
+            GQ_legendre(a, b, n,int_legendre, Legendre_time);
 
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Running Gaussian-Legendre quadrature"<< endl;
             cout  << setiosflags(ios::showpoint | ios::uppercase);
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Gaussian-Legendre quadrature = "<< setw(20) << setprecision(15)  << int_legendre << endl;
+            cout << "CPU-time for N = " << n <<":" << setw(20) << setprecision(15)  << Legendre_time << endl;
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Excact result = "<< Exact_value << endl;
             cout << "------------------------------------------------------------------------------ " << endl;
         }
         else if (method == "Laguerre"){
             double int_laguerre,Laguerre_time;
-            Gauss_laguerre(n,PI, int_laguerre, Laguerre_time);
+            GQ_laguerre(n,PI, int_laguerre, Laguerre_time);
 
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Running Gauss-Laguerre Quadrature" << endl;
             cout << setiosflags(ios::showpoint | ios::uppercase);
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Gaussian-Laguerre quadrature = "<< setw(20) << setprecision(15)  << int_laguerre << endl;
+            cout << "CPU-time for N = " << n <<":" << setw(20) << setprecision(15)  << Laguerre_time << endl;
             cout << "------------------------------------------------------------------------------ " << endl;
             cout << "Excact result = "<< Exact_value << endl;
             cout << "------------------------------------------------------------------------------ " << endl;
         }
+
     }
 
 }  // end of main program
