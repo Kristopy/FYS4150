@@ -8,7 +8,7 @@
 
 #include "Legendre.h"
 #include "Laguerre.h"
-#include "Repulsion_function.h"
+#include "repulsion_function.h"
 
 
 using namespace std;
@@ -16,8 +16,9 @@ using namespace std;
 //----------------------------------------------------------------------------------------------------------------------
 // Gaussian-Legendre quadrature
 //----------------------------------------------------------------------------------------------------------------------
-double GQ_legendre(double a, double b, int N, double& int_legendre, double& Legendre_time){
+void GQ_legendre(double a, double b, int N, double& int_legendre, double& Legendre_time, bool WriteToFile){
     clock_t start_legendre, finish_legendre;
+    string Method = "Gaussian-Legendre quadrature";
     //Defining pointers: mesh-point and weights
     double *x = new double [N];
     double *w = new double [N];
@@ -48,18 +49,24 @@ double GQ_legendre(double a, double b, int N, double& int_legendre, double& Lege
     Legendre_time = (double) (finish_legendre - start_legendre)/(CLOCKS_PER_SEC); // Stops counting
     int_legendre = int_leg;
 
+    if (WriteToFile == false){
+        OutputToTerminalGQ(Method, N, int_legendre, Legendre_time);
+    }
+
     delete [] x;
     delete [] w;
-    }
+}
 // End integration loop legendre
 
 
 //----------------------------------------------------------------------------------------------------------------------
 // Gaussian-Laguerre quadrature
 //----------------------------------------------------------------------------------------------------------------------
-double GQ_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time){
+void GQ_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time, bool WriteToFile){
 
+    string Method = "Gauss-Laguerre Quadrature";
     clock_t start_laguerre, finish_laguerre;
+
     //Defining various pointers: mesh-points and weights for three variables.
     double *R_Gauss_Laguerre = new double [N+1];
     double *Weights_Gauss_Laguerre = new double [N+1];
@@ -104,12 +111,19 @@ double GQ_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time
     int_lag *= norm;
     int_laguerre = int_lag;
 
+    if (WriteToFile == false){
+        OutputToTerminalGQ(Method, N, int_laguerre, Laguerre_time);
+    }
+
+
     delete [] R_Gauss_Laguerre;
     delete [] Weights_Gauss_Laguerre;
     delete [] Theta;
     delete [] Weights_Theta;
     delete [] Phi;
     delete [] Weights_Phi;
+
+
 }
 // End integration loop laguerre
 
@@ -117,7 +131,7 @@ double GQ_laguerre(int N, double PI, double& int_laguerre, double& Laguerre_time
 //----------------------------------------------------------------------------------------------------------------------
 // //Checking for valid integration limits [Lambda], is manipulated by adjusting ZERO.
 //----------------------------------------------------------------------------------------------------------------------
-double integration_limit_main(){
+double integration_limit(){
     int c;
     double int_limit = 0;
     for (int l = 1;  l < 100; l++){
@@ -131,7 +145,7 @@ double integration_limit_main(){
             }
     //If the exponetial value is lower than the defined zero
     //we set the integration limit, as well as breaking the loop
-    if (int_limit < 10e-4){
+    if (int_limit < 10e-5){
         double h = sqrt(c*c + c*c+ c*c);
         cout <<  "Integration limits can be set to:" << "["<< setprecision(1)  << -h <<","<< setprecision(1)  << h << "]" << endl;
         break;}
@@ -140,3 +154,33 @@ double integration_limit_main(){
     return int_limit;
 }
 // End integration loop for finding limit
+
+
+/*
+double integration_limit(){
+    int c;
+
+    int l, i, j, k;
+
+    double int_limit = 0;
+    for (l = 1;  l < 100; l++){
+        c = l;
+        for (i = 0;  i < c; i++){
+            for (j = 0; j < c; j++){
+                for (k = 0; k < c; k++){
+                    int_limit = integration_limit(i,j,k);
+                    }
+                }
+            }
+    //If the exponetial value is lower than the defined zero
+    //we set the integration limit, as well as breaking the loop
+    if (int_limit < 10e-4){
+        cout << i << endl << j << endl << k << endl;
+        double h = sqrt(i*i + j*j+ k*k);
+        cout <<  "Integration limits can be set to:" << "["<< setprecision(1)  << -h <<","<< setprecision(1)  << h << "]" << endl;
+        break;}
+    }
+    //cout << "Value of exponential = "<< setw(20) << setprecision(15)  << int_limit << endl;
+    return int_limit;
+}
+*/
