@@ -53,11 +53,9 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Project_4_General/inputoutput.cpp \
-		../Project_4_General/lib.cpp \
 		../Project_4_General/main.cpp \
 		../Project_4_General/metropolis.cpp 
 OBJECTS       = inputoutput.o \
-		lib.o \
 		main.o \
 		metropolis.o
 DIST          = /Users/kristoffervarslott/Qt/5.13.0/clang_64/mkspecs/features/spec_pre.prf \
@@ -229,7 +227,6 @@ DIST          = /Users/kristoffervarslott/Qt/5.13.0/clang_64/mkspecs/features/sp
 		../Project_4_General/Project_4_General.pro inputoutput.h \
 		lib.h \
 		metropolis.h ../Project_4_General/inputoutput.cpp \
-		../Project_4_General/lib.cpp \
 		../Project_4_General/main.cpp \
 		../Project_4_General/metropolis.cpp
 QMAKE_TARGET  = Project_4_General
@@ -1249,9 +1246,6 @@ inputoutput.o: ../Project_4_General/inputoutput.cpp ../Project_4_General/inputou
 		/usr/local/include/armadillo_bits/newarp_UpperHessenbergQR_meat.hpp \
 		/usr/local/include/armadillo_bits/compiler_setup_post.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o inputoutput.o ../Project_4_General/inputoutput.cpp
-
-lib.o: ../Project_4_General/lib.cpp ../Project_4_General/lib.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lib.o ../Project_4_General/lib.cpp
 
 main.o: ../Project_4_General/main.cpp /usr/local/include/armadillo \
 		/usr/local/include/armadillo_bits/compiler_extra.hpp \
