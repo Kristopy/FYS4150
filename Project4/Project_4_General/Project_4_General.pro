@@ -5,7 +5,6 @@ CONFIG -= qt
 
 SOURCES += \
         inputoutput.cpp \
-        lib.cpp \
         main.cpp \
         metropolis.cpp
 

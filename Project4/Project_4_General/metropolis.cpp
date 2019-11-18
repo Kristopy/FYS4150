@@ -1,6 +1,5 @@
 #include "metropolis.h"
 #include "inputoutput.h"
-#include <chrono>
 
 
 // Periodic Boundary Condition
@@ -16,7 +15,7 @@ void Initialize(int L, mat& SpinMatrix, double& Energy, double& Magnetization, s
     else if (SpinConfig == "Unordered"){
         random_device rd;
         mt19937_64 gen(rd());
-        //mt19937_64 mt_rand(time(0));
+
 
         uniform_real_distribution<double> RandomNumb(0.0, 1.0);
         for (int x = 0; x < L; x++){
@@ -40,19 +39,11 @@ void Initialize(int L, mat& SpinMatrix, double& Energy, double& Magnetization, s
     }
 }
 
-void Metropolis(int L, mat& SpinMatrix, double& Energy, double& Magnetization, vec w){
+double Metropolis(int L, mat& SpinMatrix, double& Energy, double& Magnetization, vec w){
     random_device rd;
     mt19937_64 gen(rd());
-    //auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
-    //cout << seed << endl;
 
-
-    //mt19937_64 mt_rand(seed);
     uniform_real_distribution<double> RandomNumb(0.0, 1.0);
-
-    //cout << RandomNumb(gen) << endl;
-    //Initialize(L, SpinMatrix, Energy, Magnetization, SpinConfig);
-
 
     int MaxIteration = L*L;
     for (int Iteration = 0; Iteration < MaxIteration; Iteration++){
@@ -69,11 +60,15 @@ void Metropolis(int L, mat& SpinMatrix, double& Energy, double& Magnetization, v
             SpinMatrix(Rx,Ry) *= -1;
             Magnetization += (double) 2*SpinMatrix(Rx, Ry);
             Energy += (double) dE;
+            Accepted += 1;
+
         }
     }
+    return Accepted;
 }
 
-void MonteCarloAlgorithm(ofstream& ofile, int L, double Temperature, int MonteCarloCycles, string SpinConfig, int TemperatureChoice){
+
+void MonteCarloAlgorithm(ofstream& ofile, int L, double Temperature, int MonteCarloCycles, string SpinConfig, int Approach, int Equilibrium){
     mat SpinMatrix = zeros<mat>(L,L); // Her eller i main?
     vec ExValues = zeros<vec>(5);
     double Energy = 0.0, Magnetization = 0.0;
@@ -83,26 +78,35 @@ void MonteCarloAlgorithm(ofstream& ofile, int L, double Temperature, int MonteCa
         w(dE+8)=exp(-dE/Temperature);
     }
 
+    int Accepted_Flips = 0;
+
     Initialize(L, SpinMatrix, Energy, Magnetization, SpinConfig);
 
     for (int Cycles = 1; Cycles <= MonteCarloCycles; Cycles++){
-        Metropolis(L, SpinMatrix, Energy, Magnetization, w);
+        Accepted_Flips = Metropolis(L, SpinMatrix, Energy, Magnetization, w);
         // Sett kommentar på hva som er hva
         ExValues(0) += Energy;          ExValues(1) += Energy*Energy;
         ExValues(2) += Magnetization;   ExValues(3) += Magnetization*Magnetization;
         ExValues(4) += fabs(Magnetization);
+        if (Cycles>=Equilibrium and Approach == 3){
+            //Writing to file here, the matrix has been updated, and will change for every Monte Carlo cycle.
+            WriteToFileOutputMonteCarlo(ofile, L, Cycles, Temperature, Energy);
+        }
+        else if(Approach == 4){
+            WriteToFileOutputMonteSpins(ofile, L, Cycles, Temperature, ExValues, SpinMatrix);
+        }
+        else if (Approach == 5){
+            WriteAccepted(ofile, Cycles, Accepted_Flips, L);
+        }
+        else if (Cycles >= Equilibrium and Approach == 6){
+            WriteToFileMCvsExpect(ofile, L, Cycles, Temperature, ExValues);
+        }
+
     }
 
-    if (TemperatureChoice == 1 or TemperatureChoice == 2){
+    if (Approach == 1 or Approach == 2){
         WriteToFileOutput(ofile, L, MonteCarloCycles, Temperature, ExValues);
     }
-    else if(TemperatureChoice == 3){
-        WriteToFileOutputMonteCarlo(ofile, L, MonteCarloCycles, Temperature, ExValues);
-    }
-    else if(TemperatureChoice == 4){
-        WriteToFileOutputMonteSpins(ofile, L, MonteCarloCycles, Temperature, ExValues, SpinMatrix);
-    }
-
-    // Algortime for å skrive til fil her
 }
+
 
